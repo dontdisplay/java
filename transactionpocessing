@@ -1,0 +1,78 @@
+import java.util.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.DriverManager;
+
+public class Transactionprocessing {
+    
+    public static void main(String[] args)  throws Exception{
+    java.util.Scanner in=new java.util.Scanner(System.in);
+    int amt;
+      Connection conn=DriverManager.getConnection("jdbc:mysql://localhost/advjava","root","Abhi@502");
+      Statement stmt=conn.createStatement();
+    try{
+       
+      
+        conn.setAutoCommit(false);
+        
+        String sender=new String();
+        String reciever=new String();
+        System.out.println("Enter the name of Sender");
+        sender=in.next();
+        System.out.println("Enter the name of Reciever");
+        reciever=in.next();
+        System.out.println("Enter the amount to be transferred");
+        amt=in.nextInt();
+        
+        String recv="UPDATE ACCOUNT SET BALANCE=BALANCE+"+amt+" WHERE NAME='"+reciever+"';";
+        stmt.executeUpdate(recv);
+        
+        String s1="select BALANCE from Account where NAME='"+reciever+"';";
+        ResultSet r1=stmt.executeQuery(s1);
+        
+        r1.next();
+        
+        System.out.println("Reciever balance before commit"+r1.getInt("BALANCE"));
+        
+        
+        
+        String s="select BALANCE from Account where NAME='"+sender+"';";
+        ResultSet r=stmt.executeQuery(s);
+        
+        
+            r.next(); 
+            int bal=r.getInt("BALANCE");
+     
+           if(bal<amt)
+           {
+              throw new Exception("Insuffucient Balance");
+              
+           }
+           else{
+               
+            String send="UPDATE ACCOUNT SET BALANCE=BALANCE-"+amt+" WHERE NAME='"+sender+"';";
+            stmt.executeUpdate(send);
+            
+            
+            conn.commit();
+           }
+           
+           
+            
+        
+        
+       
+        
+    }catch(Exception e)
+    {
+       System.out.println(""+e);
+        conn.rollback();
+     
+    }
+    conn.close();
+    stmt.close();
+    
+    }
+}
+
