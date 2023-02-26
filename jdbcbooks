@@ -1,0 +1,61 @@
+package jdbcbooks;
+
+
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+
+public class Jdbcbooks {
+    
+    public static void main(String[] args) throws Exception {
+    //Establishing COnnection
+    Scanner in = new Scanner(System.in);
+    
+    Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/advjava","root","Abhi@502");
+    
+    Statement stmt=con.createStatement();
+    
+    String authname=new String();
+   int choice;
+   boolean flag=true;
+    while(flag)
+    {
+    System.out.println("Enter 1 to search book");
+    System.out.println("Enter 2 to exit");
+    choice=in.nextInt();
+    if(choice==2)
+    {
+       flag=false;
+       break;
+    }
+   
+    System.out.println("Enter the name of the author whose book is to be searched");
+    authname=in.next();
+    
+    String s="select * from books where author='"+authname+"';";
+    
+    ResultSet r=stmt.executeQuery(s);
+    
+    while(r.next())
+    {
+        String name=r.getString("name");
+        String author=r.getString("author");
+        int price=r.getInt("price");
+        
+        System.out.println("BOOK DETAILS");
+        System.out.println("Name->"+name);
+        System.out.println("Author->"+author);
+        System.out.println("Price->"+price);
+        
+    }
+    
+    
+    }
+    con.close();
+    stmt.close();
+}
+}
