@@ -1,0 +1,136 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+ class ArrList{
+    ArrayList<Integer> intls=new ArrayList<Integer>();
+    ArrayList<Float> fltls=new ArrayList<Float>();
+   
+    boolean addint(int ele)
+    {
+    if(intls.add(ele))
+      return true;
+    return false;
+    }
+    boolean addfloat(float ele)
+    {
+    if(fltls.add(ele))
+        return true;
+    return false;   
+    }
+    int remint(int ele)
+    {
+    return intls.remove(ele);    
+    }
+    boolean remflt(float ele)
+    {
+      return fltls.remove(ele);    
+    }
+    boolean LinearSearch(int ele)
+    {
+       for(int i=0;i<intls.size();i++)
+       {
+         if(intls.get(i)==ele){
+               return true;}
+         
+       }
+       return false;
+    }
+    boolean LinearSearch(float ele)
+    {
+              for(int i=0;i<fltls.size();i++)
+       {
+         if(fltls.get(i)==ele){
+               return true;}
+         
+       }
+       return false;
+    }
+    
+    
+}
+public class listarray {
+    public static void main(String []args)
+    {
+     Scanner in = new Scanner(System.in);
+     ArrList a=new ArrList();
+     int choice;
+     boolean flag=true;
+     boolean found;
+     int iele;
+     float fele,r;
+     
+     while(flag)
+     {
+     System.out.println("Enter 1 to add element to Integer List");
+     System.out.println("Enter 2 to add element to Float List");
+     System.out.println("Enter 3 to remove element from Integer List");
+     System.out.println("Enter 4 to remove element from Float List");
+     System.out.println("Enter 5 to perform search in integer list");
+     System.out.println("Enter 6 to perform search on float list");
+     System.out.println("Enter 7 to exit");
+     choice=in.nextInt();   
+     
+     switch(choice)
+     {
+         case 1:System.out.println("Enter the element to be added ");
+                 iele=in.nextInt();
+                 if(a.addint(iele)){
+                    System.out.println("Element added");
+                    System.out.println(""+a.intls);}
+                 else{
+                    System.out.println("Error");
+                    System.out.println(""+a.intls);}
+                 break;
+                 
+         case 2:System.out.println("Enter the element to be added ");
+                 fele=in.nextFloat();
+                 if(a.addfloat(fele)){
+                    System.out.println("Element added");
+                 System.out.println(""+a.fltls);}
+                    
+                 else{
+                    System.out.println("Error");
+                    System.out.println(""+a.fltls);}
+                 break;
+         case 3:System.out.println("Enter the index of element to be removed ");
+                 iele=in.nextInt();
+                 a.remint(iele);
+                    System.out.println("Element removed "+a.intls );
+                
+                 break;
+         case 4:System.out.println("Enter the element index of to be removed ");
+                 fele=in.nextFloat();
+                 a.remflt(fele);
+                    System.out.println("Element removed "+a.fltls );
+                
+                 break;
+                 
+         case 5:System.out.println("Enter the elemnt to be searched");
+                 iele=in.nextInt();
+                 found=a.LinearSearch(iele);
+                 if(found)
+                    System.out.println("Element found");
+                 else
+                    System.out.println("Element not found");
+                 break;
+                 
+         case 6:System.out.println("Enter the elemnt to be searched");
+                 fele=in.nextFloat();
+                 found=a.LinearSearch(fele);
+                 if(found)
+                    System.out.println("Element found");
+                 else
+                    System.out.println("Element not found");
+                 break;
+          case 7:flag=false;
+                 break;
+                 
+          default:flag=false;
+                    break;
+
+     }
+     }
+     
+   
+    }
+}
