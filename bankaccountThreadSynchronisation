@@ -1,0 +1,84 @@
+package threadingtermworks;
+
+import java.util.Scanner;
+
+class UnsynAccount implements Runnable
+{
+    int balance;
+    public UnsynAccount()
+    {
+        this.balance=10000;
+    }
+    void deposit(int amt)
+    {
+     this.balance+=amt;
+     System.out.println("Thread -> "+Thread.currentThread().getName()+" Balance-"+this.balance);
+    }
+    void withdrawl(int amt)
+    {
+        if(amt>this.balance)
+        {
+         System.out.println("Thread -> "+Thread.currentThread().getName()+"  INSUFFICIENT BALANCE");   
+        }
+        else
+        {
+            this.balance-=amt;
+            System.out.println("Thread ->"+Thread.currentThread().getName()+" Balance-"+this.balance);
+        }
+}
+    public void run()
+    {
+        this.deposit(2000);
+        this.withdrawl(2000);
+    }
+}
+class SynAccount implements Runnable{
+    int balance;
+    SynAccount()
+    {
+        this.balance=10000;
+    }
+     synchronized void deposit(int amt)
+    {
+        this.balance+=amt;
+        System.out.println("Thread->"+Thread.currentThread().getName()+" Balance-"+this.balance);
+    }
+    synchronized void withdrawl(int amt)
+    {
+        if(this.balance<amt)
+        {
+            System.out.println("Thread ->"+ Thread.currentThread().getName() +" Insufficient Balance");
+        }
+        else{
+            this.balance-=amt;
+            System.out.println("Thread ->"+ Thread.currentThread().getName() +" Balance-"+this.balance);
+        }
+    }
+    public void run()
+    {
+        this.deposit(2000);
+        this.withdrawl(2000);
+    }
+}
+public class Banking {
+    public static void main(String []args) throws Exception
+    {
+    UnsynAccount acc1 = new UnsynAccount();
+    Thread t1=new Thread(acc1);
+    Thread t2=new Thread(acc1);
+    Thread t3=new Thread(acc1);
+    System.out.println("UNSYNCHRONIZED\n\n");
+    t1.start();
+    t2.start();
+    t3.start();
+    SynAccount acc2=new SynAccount();
+    Thread t4=new Thread(acc2);
+    Thread t5=new Thread(acc2);
+    Thread t6=new Thread(acc2);
+    Thread.sleep(1000);
+    System.out.println("\n\n\nSYNCHRONIZED\n\n");
+    t4.start();
+    t5.start();
+    t6.start();
+    }
+}
