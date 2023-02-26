@@ -1,0 +1,72 @@
+package com.mycompany.semend;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Lenovo
+ */
+public class binarydata {
+    public static void main(String []args) throws Exception
+    {
+        Scanner in=new Scanner(System.in);
+        String path1 = new String();
+        String path2 =new String();
+        String usertext=new String();
+        byte b[]=new byte[1024];
+        int choice,count;
+        boolean flag=true;
+        
+        System.out.println("Enter source file path");
+                    path1=in.next();
+                    System.out.println("Enter destination file path");
+                    path2=in.next();
+                    File fobj1=new File(path1);
+                    File fobj2=new File(path2);
+        
+       
+        
+        while(flag){
+        System.out.println("Enter 1 to Read user defined text to be written to the source file.");
+        System.out.println("Enter 2 to Write every alternate byte from the source to the destination file. ");
+        System.out.println("Enter 3 to Compare properties fo file");
+        System.out.println("Enter anything to exit");
+        choice=in.nextInt();
+        switch(choice)
+        {
+                  
+            case 1:System.out.println("Enter the text to be written into source file");
+                   usertext=in.next();
+                   b=usertext.getBytes();
+                   FileOutputStream wrtsrc=new FileOutputStream(fobj1);
+                   wrtsrc.write(b);
+                   break;
+            
+            case 2:FileInputStream finsrc=new FileInputStream(fobj1);
+                   FileOutputStream foutdest=new FileOutputStream(fobj2);
+                   finsrc.read(b);
+                   for(int i=0;i<(int)b.length;i++)
+                   {
+                       if(i%2==0)
+                           foutdest.write(b[i]);
+                   }
+                   break;
+            case 3: System.out.println("Property of source file");
+                    System.out.println("Name-> "+fobj1.getName());
+                    System.out.println("Absoltute Pathname-> "+fobj1.getAbsolutePath());
+                    System.out.println("Size -> "+fobj1.length()+" bytes");
+                    System.out.println("Canonical Pathname-> "+fobj1.getCanonicalPath());
+                    
+                    System.out.println("Property of destination file");
+                    System.out.println("Name-> "+fobj2.getName());
+                    System.out.println("Absoltute Pathname-> "+fobj2.getAbsolutePath());
+                    System.out.println("Size -> "+fobj2.length()+" bytes");
+                    System.out.println("Canonical Pathname-> "+fobj2.getCanonicalPath());
+                    break;
+            default:flag=false;
+        }
+    }}
+}
