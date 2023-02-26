@@ -1,0 +1,131 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
+class HashMapClass
+{
+    HashMap<String,String> login= new HashMap<>();
+    
+     void Keys()
+    {
+        if(login.isEmpty())
+            System.out.println("HashMap is empty");
+        else
+            System.out.println("KEYS -> "+login.keySet() );     
+    }
+    void Values()
+    {
+        if(login.isEmpty())
+             System.out.println("HashMap is empty");
+        else
+            System.out.println("The Values are->"+ login.values());
+    }
+    void KeyValues()
+    {
+        if(login.isEmpty())
+            System.out.println("HashMap is empty");
+        else
+            System.out.println("The Key-value pairs ->"+login.entrySet());
+    }
+    void change(String key,String value)
+    {
+        if(login.containsKey(key))
+        {
+            login.replace(key,login.get(key), value);
+            System.out.println("Value Replaced");
+        }
+        else
+            System.out.println("The key not present");
+        
+    }
+    void Remove(String key,String value)
+    {
+        if(login.containsKey(key))
+        {
+            login.remove(key, value);
+            System.out.println("Pair removed");
+        }
+        else
+            System.out.println("the Key is not present");
+    }
+
+  
+}
+public class HMap {
+    public static void main(String []args)
+    {
+        HashMapClass H=new HashMapClass();
+        int choice;
+        boolean flag = true;
+        String key=new String();
+        String value=new String();
+        Scanner in=new Scanner(System.in);
+        while(flag){
+        System.out.println("Enter 1 for adding a KEY_VALUE Pair");
+        System.out.println("Enter 2 for Retrieve value by given key");
+        System.out.println("Enter 3 for retrieving all keys");
+        System.out.println("Enter 4 for retrieving all values");
+        System.out.println("Enter 5 for retreiving all keyvaluepairs");
+        System.out.println("eNTER 6 Change the value of given key");
+        System.out.println("Enter 7 to remove a key value pair");
+        System.out.println("Enbter 8 to Check if value present in keymap");
+        System.out.println("Enter 9 to Display Hashmap");
+        System.out.println("Enter 10 to exit");
+        choice = in.nextInt();
+        switch(choice)
+        {
+            case 1: System.out.println("Enter the key data");
+                    key=in.next();
+                    System.out.println("Enter the value data");
+                    value=in.next();
+                    H.login.put(key, value);
+                    break;
+                    
+            case 2: System.out.println("Enter the key");
+                    key=in.next();
+                    System.out.println("Value - "+H.login.get(key));
+                    break;
+                    
+            case 3:
+                   H.Keys();
+                   break;
+                   
+            case 4:H.Values();
+                    break;
+            
+            case 5:H.KeyValues();
+                    break;
+                    
+            case 6: System.out.println("Enter the key whose value is to be changed");
+                    key=in.next();
+                    System.out.println("Enter the value to be replaced");
+                    value=in.next();
+                    H.change(key, value);
+                    break;
+            
+            case 7: System.out.println("Enter the key  is to be removed");
+                    key=in.next();
+                    System.out.println("Enter the value to be removed");
+                    value=in.next();
+                    H.Remove(key,value);
+                    break;
+            case 8: System.out.println("Enter the value to be checked");
+                    value=in.next();
+                    if(H.login.containsValue(value))
+                        System.out.println("the value is present");
+                    else
+                        System.out.println("Value is not present");
+                    break;
+                    
+            case 9:System.out.println("the HashMap is");
+                   System.out.println(""+H.login);
+                   break;
+                   
+            default:flag=false;
+                    
+                    
+                    
+                    
+        }}
+        
+    }
+}
