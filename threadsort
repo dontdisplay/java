@@ -1,0 +1,99 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package threadingtermworks;
+
+import java.util.Scanner;
+
+class ThreadASC implements Runnable{
+    int list[];
+    String tname;
+    ThreadASC(String name,int x[]){
+        tname=name;
+        list=x;
+        Thread t = new Thread(this,name);
+        t.start();
+    }
+    public void run(){
+       System.out.println("ThreadASC under Execution");
+       int temp,i;
+       
+       for(i=0;i<(list.length)-1;i++)
+       {
+          for(int j=0;j<(list.length)-i-1;j++)
+          {
+              if(list[j]>list[j+1])
+              {
+                  temp=list[j];
+                  list[j]=list[j+1];
+                  list[j+1]=temp;
+              }
+          }}
+          System.out.println("Ascending arranged by thread"+tname);
+          for(i=0;i<list.length;i++)
+          {
+              System.out.print(" "+list[i]);
+          }
+              
+       }
+    }
+
+class ThreadDSC implements Runnable{
+    String tname;
+    int list[];
+    ThreadDSC(String name,int x[])
+    {
+        tname=name;
+        list=x;
+       Thread t=new Thread(this,name);
+       t.start();
+       
+        
+    }
+    @Override
+    public void run()
+    {
+       System.out.println("ThreadDSC under Execution");
+       int temp,i;
+       for(i=0;i<(list.length)-1;i++)
+       {
+          for(int j=0;j<(list.length)-i-1;j++)
+          {
+              if(list[j]<list[j+1])
+              {
+                  temp=list[j];
+                  list[j]=list[j+1];
+                  list[j+1]=temp;
+              }
+          }}
+          System.out.println("Descending arranged by thread"+tname);
+          for(i=0;i<list.length;i++)
+          {
+              System.out.print(" "+list[i]);
+          }
+    }
+}
+public class ThreadingTermworks {
+
+   
+    public static void main(String[] args) throws Exception{
+        
+        Scanner in=new Scanner(System.in);
+        System.out.println("Enter the number of elements");
+        int n=in.nextInt();
+        int []array=new int[n];
+        System.out.println("Enter the arrayelements");
+        for(int i=0;i<n;i++)
+        {
+            array[i]=in.nextInt();
+        }
+       new ThreadASC("ASCENDING",array);
+       Thread.sleep(1000);
+       new ThreadDSC("DESCENDING",array);
+        
+        
+        
+    }
+    
+}
