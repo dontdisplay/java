@@ -1,0 +1,81 @@
+import java.util.LinkedList;
+
+class Buffer
+{
+  int capacity;
+  LinkedList<Integer> buffer=new LinkedList<>();
+  Buffer(int capacity)
+  {
+      this.capacity=capacity;
+  }
+  synchronized public void produce(int item) throws Exception
+  {
+      while(buffer.size()==capacity)
+          wait();
+      buffer.add(item);
+      System.out.println("produced item-"+item);
+      notify();      
+  }
+  synchronized public void consume() throws Exception
+  {
+      while(buffer.size()==0)
+          wait();
+      System.out.println("Conumed item-"+buffer.removeFirst());
+}
+}
+
+class Producer extends Thread
+{
+    private Buffer buff;
+    Producer(Buffer b)
+    {
+        buff=b;
+    }
+    @Override
+    public void run() 
+    {
+        try{
+    for(int i=0;i<5;i++)
+    {
+        buff.produce(i);
+    }
+    }catch(Exception e)
+    {
+        System.out.println(""+e);
+    }
+    }
+}
+
+class Consumer extends Thread
+{
+    private Buffer buff;
+    Consumer(Buffer b)
+    {
+        this.buff=b;
+    }
+   public void run()
+   {
+       try{
+           for(int i=0;i<5;i++)
+           {
+               buff.consume();
+           }
+       }catch(Exception e)
+       {
+           System.out.println(""+e);
+       }
+   }
+}
+   
+
+
+public class ProducerConsumer {
+    public static void main(String []args)
+    {
+        Buffer b=new Buffer(3);
+        Producer p=new Producer(b);
+        Consumer c=new Consumer(b);
+        p.start();
+        c.start();
+    }
+}
