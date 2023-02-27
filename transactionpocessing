@@ -1,78 +1,74 @@
-import java.util.*;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package practice;
+
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Scanner;
 
-public class Transactionprocessing {
+public class TRANSACTION {
+public static void main(String []args)throws Exception
+{
+    String sender;
+    String reciever;
+    Scanner in=new Scanner(System.in);
     
-    public static void main(String[] args)  throws Exception{
-    java.util.Scanner in=new java.util.Scanner(System.in);
-    int amt;
-      Connection conn=DriverManager.getConnection("jdbc:mysql://localhost/advjava","root","Abhi@502");
-      Statement stmt=conn.createStatement();
+    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/books","root","Abhi@502");
+    
+    Statement stmt=conn.createStatement();
+    
+    System.out.println("Enter the name of sender in caps");
+    sender=in.next();
+    System.out.println("Enter the name of reciever in caps");
+    reciever=in.next();
+    System.out.println("Enter the amount to be transferred");
+    int amt=in.nextInt();
+    
+    String bals="select BALANCE from Account where NAME='"+sender+"';";
+    String balr="select BALANCE from Account where NAME='"+reciever+"';";
+    String send="Update  Account set BALANCE=BALANCE-"+amt+" where NAME='"+sender+"';";
+    String recv="Update  Account set BALANCE=BALANCE+"+amt+" where NAME='"+reciever+"';";
+    
     try{
+       conn.setAutoCommit(false);
+       stmt.executeUpdate(recv);
+       ResultSet r1=stmt.executeQuery(balr);
+       r1.next();
+       System.out.println("RECIEVER UPDATED BALANCE BEFORE COMMIT - "+r1.getInt("BALANCE"));
        
-      
-        conn.setAutoCommit(false);
-        
-        String sender=new String();
-        String reciever=new String();
-        System.out.println("Enter the name of Sender");
-        sender=in.next();
-        System.out.println("Enter the name of Reciever");
-        reciever=in.next();
-        System.out.println("Enter the amount to be transferred");
-        amt=in.nextInt();
-        
-        String recv="UPDATE ACCOUNT SET BALANCE=BALANCE+"+amt+" WHERE NAME='"+reciever+"';";
-        stmt.executeUpdate(recv);
-        
-        String s1="select BALANCE from Account where NAME='"+reciever+"';";
-        ResultSet r1=stmt.executeQuery(s1);
-        
-        r1.next();
-        
-        System.out.println("Reciever balance before commit"+r1.getInt("BALANCE"));
-        
-        
-        
-        String s="select BALANCE from Account where NAME='"+sender+"';";
-        ResultSet r=stmt.executeQuery(s);
-        
-        
-            r.next(); 
-            int bal=r.getInt("BALANCE");
-     
-           if(bal<amt)
-           {
-              throw new Exception("Insuffucient Balance");
-              
-           }
-           else{
-               
-            String send="UPDATE ACCOUNT SET BALANCE=BALANCE-"+amt+" WHERE NAME='"+sender+"';";
-            stmt.executeUpdate(send);
-            
-            
-            conn.commit();
-           }
-           
-           
-            
-        
-        
+       ResultSet r2=stmt.executeQuery(bals);
+       r2.next();
+       int bal=r2.getInt("BALANCE");
        
-        
-    }catch(Exception e)
-    {
-       System.out.println(""+e);
-        conn.rollback();
+       if(bal<amt)
+           throw new Exception("INSUFFICIENT BALANCE");
+       else
+       {
+           stmt.executeUpdate(send);
+           conn.commit();
+           System.out.println("Transaction Commited");
+           ResultSet r3=stmt.executeQuery(bals);
+           r3.next();
+           System.out.println();
+           System.out.println("SENDER BALANCE -"+r3.getInt("BALANCE"));
+           ResultSet r4=stmt.executeQuery(balr);
+           r4.next();
+           System.out.println("RECIEVER BALANCE -"+r4.getInt("BALANCE"));
+       }
      
+    }catch(Exception e){
+    System.out.println("TRANSACTION ROLLING BACK");
+    System.out.println(""+e);
+    conn.rollback();
+    
     }
     conn.close();
     stmt.close();
-    
-    }
-}
 
+    
+}
+}
